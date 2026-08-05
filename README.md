@@ -46,7 +46,7 @@ public mirror. Status: ⬜ not started · 🔄 in progress · ✅ done.
 
 | ID | Task | Est. | Done |
 |---|---|---|---|
-| E1 | Kickoff + full environment setup | 3.5h | 🔄 |
+| E1 | Kickoff + full environment setup | 3.5h | ✅ |
 | E3 | Claude Code 101 | 3.5h | 🔄 |
 | E4 | Agentic fundamentals: LLM, RAG, tool use, MCP | 7h | ⬜ |
 | E5 | Introduction to Model Context Protocol (MCP) | 7h | ⬜ |
