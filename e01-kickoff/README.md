@@ -28,6 +28,8 @@
 The `.env` habit was built before there was anything to leak — that was the point of
 doing it on day one rather than the first time an API key showed up.
 
-Remaining: Hugging Face and Microsoft Learn accounts, each with a 2-minute smoke test
-(log in, create one dummy resource), then put the three weekly blocks on the calendar
-as recurring events.
+Hugging Face and Microsoft Learn accounts are created. Microsoft Learn is smoke-tested —
+first AI-900 module started, so the learning path shows progress against the account.
+
+Remaining: the Hugging Face smoke test (log in, create one dummy Space or model repo),
+then put the three weekly blocks on the calendar as recurring events.
