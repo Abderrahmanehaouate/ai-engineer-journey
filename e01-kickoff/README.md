@@ -9,7 +9,7 @@
 - [ ] All 4 accounts created and verified (Anthropic, GitHub, Hugging Face, Microsoft Learn)
 - [x] Claude Code installed and running
 - [x] `ai-engineer-journey` repo created with README + schedule
-- [ ] Weekly study blocks on the calendar
+- [x] Weekly study blocks on the calendar
 
 ## What was actually set up
 

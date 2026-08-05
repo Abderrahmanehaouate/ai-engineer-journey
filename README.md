@@ -40,14 +40,14 @@ Protected study blocks — ~7h/week, on the calendar as recurring events.
 ## Program tasks
 
 14 tasks across two phases. Source of truth is the Notion tracker; this table is the
-public mirror.
+public mirror. Status: ⬜ not started · 🔄 in progress · ✅ done.
 
 ### Phase 1 — Jul–Aug (foundations)
 
 | ID | Task | Est. | Done |
 |---|---|---|---|
-| E1 | Kickoff + full environment setup | 3.5h | ⬜ |
-| E3 | Claude Code 101 | 3.5h | ⬜ |
+| E1 | Kickoff + full environment setup | 3.5h | 🔄 |
+| E3 | Claude Code 101 | 3.5h | 🔄 |
 | E4 | Agentic fundamentals: LLM, RAG, tool use, MCP | 7h | ⬜ |
 | E5 | Introduction to Model Context Protocol (MCP) | 7h | ⬜ |
 | E6 | GitHub Copilot & GitHub at the state of the art | 3.5h | ⬜ |
