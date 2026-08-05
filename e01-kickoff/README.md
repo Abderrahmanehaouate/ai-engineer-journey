@@ -6,10 +6,10 @@
 
 ## Definition of done
 
-- [ ] All 4 accounts created and verified (Anthropic, GitHub, Hugging Face, Microsoft Learn)
+- [x] All 4 accounts created and verified (Anthropic, GitHub, Hugging Face, Microsoft Learn)
 - [x] Claude Code installed and running
 - [x] `ai-engineer-journey` repo created with README + schedule
-- [ ] Weekly study blocks on the calendar
+- [x] Weekly study blocks on the calendar
 
 ## What was actually set up
 
@@ -28,6 +28,8 @@
 The `.env` habit was built before there was anything to leak — that was the point of
 doing it on day one rather than the first time an API key showed up.
 
-Remaining: Hugging Face and Microsoft Learn accounts, each with a 2-minute smoke test
-(log in, create one dummy resource), then put the three weekly blocks on the calendar
-as recurring events.
+All four accounts are created and smoke-tested: Microsoft Learn by starting the first
+AI-900 module, Hugging Face by creating a dummy resource. Every account in this program
+has been logged into and used at least once — none is a name on a list.
+
+The three weekly blocks are on the calendar as recurring events. E1 is complete.
