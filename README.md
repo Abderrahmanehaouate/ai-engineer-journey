@@ -16,8 +16,8 @@ a local `.env` (see [`.env.example`](.env.example)), which is git-ignored.
 |---|---|---|
 | Anthropic (Claude Code) | Primary coding agent | ✅ Active |
 | GitHub | Source control, portfolio | ✅ Active — [@Abderrahmanehaouate](https://github.com/Abderrahmanehaouate) |
-| Hugging Face | Agents course + certification (E8) | ⬜ To create |
-| Microsoft Learn | AI-900 / AB-620 / AI-103 paths | ⬜ To create |
+| Hugging Face | Agents course + certification (E8) | ✅ Active |
+| Microsoft Learn | AI-900 / AB-620 / AI-103 paths | ✅ Active |
 
 > Smoke-test rule: after creating each account, log in and create one dummy resource
 > before moving on. An account that has never been used is not a verified account.
