@@ -1,0 +1,40 @@
+# --- Secrets: never commit these ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+secrets.*
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# --- Node ---
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+.npm/
+
+# --- Notebooks ---
+.ipynb_checkpoints/
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# --- Agent / tooling local state ---
+.claude/settings.local.json
