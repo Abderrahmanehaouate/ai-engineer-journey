@@ -47,7 +47,7 @@ public mirror. Status: ⬜ not started · 🔄 in progress · ✅ done.
 | ID | Task | Est. | Done |
 |---|---|---|---|
 | E1 | Kickoff + full environment setup | 3.5h | ✅ |
-| E3 | Claude Code 101 | 3.5h | 🔄 |
+| E3 | Claude Code 101 | 3.5h | ✅ |
 | E4 | Agentic fundamentals: LLM, RAG, tool use, MCP | 7h | ⬜ |
 | E5 | Introduction to Model Context Protocol (MCP) | 7h | ⬜ |
 | E6 | GitHub Copilot & GitHub at the state of the art | 3.5h | ⬜ |
@@ -66,7 +66,7 @@ public mirror. Status: ⬜ not started · 🔄 in progress · ✅ done.
 | E14 | Ship an internal agent to production (capstone) | 35h | ⬜ |
 | E15 | Azure AI Apps & Agents Developer Associate (AI-103) prep | 14h | ⬜ |
 
-**Total estimated effort: 146.5h** — roughly 21 weeks at 7h/week.
+**Total estimated effort: 147h** — roughly 21 weeks at 7h/week.
 
 ---
 
@@ -82,6 +82,7 @@ public mirror. Status: ⬜ not started · 🔄 in progress · ✅ done.
 ```
 ai-engineer-journey/
 ├── README.md          # this file
+├── CLAUDE.md          # working agreement for Claude Code in this repo
 ├── .env.example       # template for local secrets — copy to .env
 ├── .gitignore
 └── e01-kickoff/       # per-task directories, added as the program progresses
