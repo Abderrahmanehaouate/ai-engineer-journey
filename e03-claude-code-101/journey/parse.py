@@ -65,18 +65,22 @@ class Task:
 
     @property
     def observed(self) -> str:
-        """Status implied by the checkboxes, regardless of what the mirror claims.
+        """Status implied by the repo itself, regardless of what the mirror claims.
 
-        A task with no directory or no checkboxes has nothing to observe, so it
-        reads as not started.
+        Scaffolding a task directory with acceptance criteria *is* starting the
+        task, so criteria that exist but are all unticked read as DOING rather
+        than TODO. That gap is where drift used to hide: the mirror could sit on
+        not-started for a task with a checked-out branch and a written README,
+        and both sides agreed because both meant "no boxes ticked yet".
+
+        Only two states are genuinely not-started or unreadable: no directory at
+        all, and a directory whose README has no "Definition of done" to judge.
         """
-        if not self.dod:
+        if self.dod:
+            return DONE if all(item.checked for item in self.dod) else DOING
+        if self.directory is None:
             return TODO
-        if all(item.checked for item in self.dod):
-            return DONE
-        if any(item.checked for item in self.dod):
-            return DOING
-        return TODO
+        return UNKNOWN
 
     @property
     def drifted(self) -> bool:

@@ -68,8 +68,10 @@ def test_observed_status_follows_the_checkboxes() -> None:
 
     assert task(True, True).observed == "done"
     assert task(True, False).observed == "doing"
-    assert task(False, False).observed == "todo"
-    assert task().observed == "todo", "nothing to observe reads as not started"
+    assert task(False, False).observed == "doing", (
+        "criteria written but unticked means the task is underway, not untouched"
+    )
+    assert task().observed == "todo", "no directory and no criteria reads as not started"
 
 
 def test_drift_compares_mirror_against_observation() -> None:
@@ -99,7 +101,29 @@ def test_load_program_survives_a_directory_with_no_readme(repo: Path) -> None:
     (repo / "e04-agentic-fundamentals").mkdir()
     by_id = {task.id: task for task in load_program(repo)}
     assert by_id["E4"].directory is not None
-    assert by_id["E4"].observed == "todo"
+    assert by_id["E4"].observed == "unknown", "a directory with no criteria cannot be judged"
+
+
+def test_a_scaffolded_task_with_no_ticks_yet_reads_as_in_progress(repo: Path) -> None:
+    """The E4 case: branch checked out, README written, not one box ticked."""
+    scaffold = repo / "e04-agentic-fundamentals"
+    scaffold.mkdir()
+    (scaffold / "README.md").write_text(
+        "# E4\n\n## Definition of done\n\n- [ ] one\n- [ ] two\n", encoding="utf-8"
+    )
+
+    by_id = {task.id: task for task in load_program(repo)}
+    assert by_id["E4"].observed == "doing"
+    assert by_id["E4"].drifted is True, "root README still says not-started and must be called out"
+
+
+def test_not_started_is_distinguishable_from_started_without_criteria(repo: Path) -> None:
+    by_id = {task.id: task for task in load_program(repo)}
+    assert by_id["E12"].observed == "todo", "E12 has no directory at all"
+
+    (repo / "e12-cert-ai-900").mkdir()
+    by_id = {task.id: task for task in load_program(repo)}
+    assert by_id["E12"].observed == "unknown", "scaffolded but unreadable is not the same thing"
 
 
 def test_is_repo_root_needs_both_a_readme_and_a_task_directory(tmp_path: Path, repo: Path) -> None:

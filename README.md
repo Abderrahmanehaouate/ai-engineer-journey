@@ -48,7 +48,7 @@ public mirror. Status: ⬜ not started · 🔄 in progress · ✅ done.
 |---|---|---|---|
 | E1 | Kickoff + full environment setup | 3.5h | ✅ |
 | E3 | Claude Code 101 | 3.5h | ✅ |
-| E4 | Agentic fundamentals: LLM, RAG, tool use, MCP | 7h | ⬜ |
+| E4 | Agentic fundamentals: LLM, RAG, tool use, MCP | 7h | 🔄 |
 | E5 | Introduction to Model Context Protocol (MCP) | 7h | ⬜ |
 | E6 | GitHub Copilot & GitHub at the state of the art | 3.5h | ⬜ |
 | E7 | Claude Code in Action | 7h | ⬜ |
@@ -70,6 +70,24 @@ public mirror. Status: ⬜ not started · 🔄 in progress · ✅ done.
 
 ---
 
+## Known risks
+
+**The end date and the effort estimate do not agree.** 147h at 7h/week is 21 weeks. E1
+started 2026-07-27, so 21 weeks lands around **2026-12-20**, against a stated target of
+end of October — a gap of roughly 50h. Measured generously from 2026-07-01, capacity to
+2026-10-31 is ~122h against 147h needed, so the gap does not close on any reading.
+
+Three ways out: extend the end date, raise the weekly hours, or cut scope. **The decision is
+deliberately deferred to the Phase 1 → Phase 2 boundary (after E11)**, when the real per-task
+velocity from Phase 1 is known and the estimates can be re-based on evidence rather than
+guesswork.
+
+Do not let it slip past that point. E14 (capstone, 35h) plus the three certifications
+(E12, E13, E15 — 28h) are 63h of the total and all sit in Phase 2, so Phase 2 is where the
+gap becomes unavoidable rather than theoretical.
+
+---
+
 ## Repo conventions
 
 - One directory per task, named by task ID: `e03-claude-code-101/`, `e08-hf-agents/`, …
@@ -81,9 +99,12 @@ public mirror. Status: ⬜ not started · 🔄 in progress · ✅ done.
 
 ```
 ai-engineer-journey/
-├── README.md          # this file
-├── CLAUDE.md          # working agreement for Claude Code in this repo
-├── .env.example       # template for local secrets — copy to .env
+├── README.md                   # this file
+├── CLAUDE.md                   # working agreement for Claude Code in this repo
+├── .env.example                # template for local secrets — copy to .env
 ├── .gitignore
-└── e01-kickoff/       # per-task directories, added as the program progresses
+├── .github/workflows/ci.yml    # ruff + mypy + pytest + journey status --strict
+├── e01-kickoff/                # per-task directories, added as the program progresses
+├── e03-claude-code-101/        # the `journey` status CLI lives here
+└── e04-agentic-fundamentals/
 ```
