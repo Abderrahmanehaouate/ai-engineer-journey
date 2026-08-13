@@ -6,11 +6,8 @@ import argparse
 import sys
 from pathlib import Path
 
-from .parse import load_program
+from .parse import find_repo_root, load_program
 from .report import render, summarize
-
-#: The package lives in e03-claude-code-101/, so the repo root is two levels up.
-DEFAULT_REPO = Path(__file__).resolve().parent.parent.parent
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -23,8 +20,8 @@ def build_parser() -> argparse.ArgumentParser:
     status.add_argument(
         "--repo",
         type=Path,
-        default=DEFAULT_REPO,
-        help="repo root to read (defaults to the enclosing journey repo)",
+        default=None,
+        help="repo root to read (default: search upward from the working directory)",
     )
     status.add_argument(
         "--strict",
@@ -41,8 +38,12 @@ def main(argv: list[str] | None = None) -> int:
         parser.print_help()
         return 0
 
+    # Resolved here, not at import time: the default depends on the working
+    # directory, which argparse would otherwise freeze when the module loads.
+    repo = args.repo if args.repo is not None else find_repo_root()
+
     try:
-        tasks = load_program(args.repo)
+        tasks = load_program(repo)
     except FileNotFoundError as exc:
         print(f"journey: {exc}", file=sys.stderr)
         return 2

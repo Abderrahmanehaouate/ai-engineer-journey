@@ -151,6 +151,34 @@ def task_directories(repo_root: Path) -> dict[int, Path]:
     return found
 
 
+def is_repo_root(path: Path) -> bool:
+    """True when `path` holds the root README and at least one ``e<N>-`` directory."""
+    if not (path / "README.md").is_file():
+        return False
+    try:
+        return any(TASK_DIR.match(entry.name) for entry in path.iterdir() if entry.is_dir())
+    except OSError:
+        return False
+
+
+def find_repo_root(start: Path | None = None) -> Path:
+    """Nearest ancestor of `start` (default: the working directory) that is the repo.
+
+    Deliberately searches from the working directory rather than from this file's
+    location. Once the package is installed normally, ``__file__`` sits in
+    site-packages and says nothing about which repo the user is standing in; only an
+    editable install makes the two coincide.
+
+    Returns `start` unchanged when no ancestor matches, so the caller still raises
+    the usual "is that the repo root?" error against a sensible path.
+    """
+    current = (start or Path.cwd()).resolve()
+    for candidate in (current, *current.parents):
+        if is_repo_root(candidate):
+            return candidate
+    return current
+
+
 def load_program(repo_root: Path) -> list[Task]:
     """Join the root README task list with whatever task directories exist."""
     root_readme = repo_root / "README.md"

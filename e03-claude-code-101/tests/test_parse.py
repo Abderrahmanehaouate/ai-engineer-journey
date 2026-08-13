@@ -5,6 +5,8 @@ from pathlib import Path
 from journey.parse import (
     DoDItem,
     Task,
+    find_repo_root,
+    is_repo_root,
     load_program,
     parse_dod,
     parse_program_table,
@@ -98,6 +100,25 @@ def test_load_program_survives_a_directory_with_no_readme(repo: Path) -> None:
     by_id = {task.id: task for task in load_program(repo)}
     assert by_id["E4"].directory is not None
     assert by_id["E4"].observed == "todo"
+
+
+def test_is_repo_root_needs_both_a_readme_and_a_task_directory(tmp_path: Path, repo: Path) -> None:
+    assert is_repo_root(repo) is True
+
+    readme_only = tmp_path / "readme-only"
+    readme_only.mkdir()
+    (readme_only / "README.md").write_text("# Not the journey repo\n", encoding="utf-8")
+    assert is_repo_root(readme_only) is False, "a stray README is not the repo root"
+
+
+def test_find_repo_root_searches_upward_from_a_nested_directory(repo: Path) -> None:
+    nested = repo / "e03-claude-code-101" / "journey"
+    nested.mkdir(parents=True, exist_ok=True)
+    assert find_repo_root(nested) == repo.resolve()
+
+
+def test_find_repo_root_falls_back_to_the_starting_point(tmp_path: Path) -> None:
+    assert find_repo_root(tmp_path) == tmp_path.resolve()
 
 
 def test_load_program_rejects_a_path_that_is_not_the_repo_root(tmp_path: Path) -> None:
