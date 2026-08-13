@@ -33,18 +33,19 @@ It reads two sources and compares them:
 | Root `README.md` task tables | ID, name, estimate, ⬜/🔄/✅ glyph | *Mirrored* — a human has to remember to update it |
 | Each `e*/README.md` "Definition of done" | Ticked / unticked checkboxes | *Observed* — moves when the work moves |
 
-Observed status is derived: all boxes ticked → `DONE`, some → `DOING`, none or no
-directory → `TODO`. Where mirrored disagrees with observed, the report prints **DRIFT**
-and names both sides. `--strict` exits non-zero, so it can gate CI.
+Observed status is derived: all boxes ticked → `DONE`, criteria present but not all ticked
+→ `DOING`, a directory with no Definition of done → `UNKNOWN`, no directory at all →
+`TODO`. Where mirrored disagrees with observed, the report prints **DRIFT** and names both
+sides. `--strict` exits non-zero, so it can gate CI.
 
 | Module | Lines | Role |
 |---|---|---|
-| `journey/parse.py` | 170 | Markdown → `Task` records; scopes checkboxes to the DoD section |
+| `journey/parse.py` | 202 | Markdown → `Task` records; scopes checkboxes to the DoD section |
 | `journey/report.py` | 85 | Text rendering and program totals |
-| `journey/cli.py` | 57 | Argument handling and exit codes |
-| `tests/` | 286 | 28 cases across parse / report / cli |
+| `journey/cli.py` | 58 | Argument handling and exit codes |
+| `tests/` | 351 | 35 cases across parse / report / cli |
 
-Gates: **28 pytest passing**, `ruff check` clean, `mypy --strict` clean.
+Gates: **35 pytest passing**, `ruff check` clean, `mypy --strict` clean.
 
 Two decisions worth recording. Output is **ASCII only** — a Windows console codepage is
 not always UTF-8, and a status tool that crashes printing its own status glyphs is worse
@@ -53,6 +54,19 @@ the same reason, since these files contain `—`, `·`, `→`, and `✅`.
 
 **It found a real error on first run:** the root README claimed 146.5h of total effort
 while the task rows summed to 147h. That number had been wrong since E1. Fixed.
+
+**Two fixes landed after E3 closed**, both found by a review on 2026-08-13:
+
+- The repo root was computed from `__file__` at import time, which only works for an
+  editable install. It now searches upward from the working directory.
+- `observed` collapsed "no directory" and "scaffolded but nothing ticked" into the same
+  `TODO`, which hid exactly the drift the tool exists to catch — E4 had a branch, a
+  directory and a written README while the tool agreed it had not started. Unticked
+  criteria now read as `DOING`.
+
+The second one is the more instructive failure: the tool was correct against its own
+tests and still wrong about the thing it was built for, because the definition of
+"started" was never examined.
 
 ## Notes
 
