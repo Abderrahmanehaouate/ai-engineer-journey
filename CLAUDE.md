@@ -102,9 +102,6 @@ removing the commit is not sufficient.
 
 ## Tooling conventions
 
-No code exists yet, but `.gitignore` records the intended toolchain for when it does:
-Python with `.venv/`, `pytest`, `ruff`, and `mypy`; Node with `npm`. Follow those choices
-rather than introducing alternatives (poetry, pipenv, black, flake8) when a task needs code.
-
-`.claude/settings.local.json` is git-ignored — local permission grants are per-machine and
-should not be committed.
+E3 established the Python toolchain: `.venv/`, `pytest`, `ruff`, `mypy`, configured per
+task directory in its own `pyproject.toml`. Follow those choices rather than introducing
+alternatives (poetry, pipenv, black, flake8) when a task needs code.
