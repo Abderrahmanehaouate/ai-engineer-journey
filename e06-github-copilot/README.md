@@ -19,8 +19,8 @@ closes two of the three boxes below.
 ## Definition of done
 
 - [ ] Copilot used in-IDE on real code
-- [ ] A PR opened with CI (Actions) passing
-- [ ] A working `ci.yml` committed
+- [x] A PR opened with CI (Actions) passing
+- [x] A working `ci.yml` committed
 
 ## Practical project
 
@@ -40,7 +40,28 @@ program plan carries durations and phases only, no calendar.
 
 ## What was actually built
 
-_To fill in as the task progresses._
+**CI, finally running.** `.github/workflows/ci.yml` was written during E3 (commit `99ed152`)
+and had sat local ever since. The push was refused every time:
+
+```
+! [remote rejected] refusing to allow an OAuth App to create or update
+  workflow `.github/workflows/ci.yml` without `workflow` scope
+```
+
+The `gh` token carried `gist, read:org, repo` — GitHub blocks any push touching
+`.github/workflows/` without `workflow` on top. So 18 commits stayed on the laptop and
+Actions had never run on this repo. `gh auth refresh -h github.com -s workflow` fixed it.
+
+The lesson is the failure mode, not the fix: the workflow was correct for two weeks and the
+repo still had no CI, because a *push* was rejected rather than a *build*. Nothing in the
+local tooling flags that — `journey status` was happily green the whole time.
+
+[PR #3](https://github.com/Abderrahmanehaouate/ai-engineer-journey/pull/3) landed it. First
+run passed green: `e03 - journey CLI` (ruff → mypy → pytest) plus the repo-wide
+`journey status --strict` drift gate.
+
+**Still open:** `actions/checkout@v4` and `actions/setup-python@v5` target Node.js 20, now
+deprecated and force-run on Node 24. Bump to `checkout@v5` / `setup-python@v6`.
 
 ## Notes
 
