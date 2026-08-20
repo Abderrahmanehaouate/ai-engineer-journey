@@ -32,6 +32,26 @@ def test_drift_alone_does_not_fail_without_strict(repo: Path) -> None:
     assert main(["status", "--repo", str(repo)]) == 0
 
 
+def test_default_repo_is_found_from_the_working_directory(
+    repo: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Without --repo the tool reads the repo enclosing the cwd, not its own source tree."""
+    nested = repo / "e03-claude-code-101"
+    monkeypatch.chdir(nested)
+
+    assert main(["status"]) == 0
+    assert "Kickoff + full environment setup" in capsys.readouterr().out
+
+
+def test_default_repo_errors_outside_any_repo(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    monkeypatch.chdir(tmp_path)
+
+    assert main(["status"]) == 2
+    assert "repo root" in capsys.readouterr().err
+
+
 def test_missing_repo_reports_an_error(tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
     assert main(["status", "--repo", str(tmp_path)]) == 2
     assert "repo root" in capsys.readouterr().err

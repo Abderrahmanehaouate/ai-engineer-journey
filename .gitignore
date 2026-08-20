@@ -38,3 +38,7 @@ $RECYCLE.BIN/
 
 # --- Agent / tooling local state ---
 .claude/settings.local.json
+
+# graphify builds the knowledge graph into graphify-out/ at the repo root.
+# It is a derived artifact - rebuild with `/graphify .` rather than committing it.
+graphify-out/

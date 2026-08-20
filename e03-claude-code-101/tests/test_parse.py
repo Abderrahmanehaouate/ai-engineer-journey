@@ -5,6 +5,8 @@ from pathlib import Path
 from journey.parse import (
     DoDItem,
     Task,
+    find_repo_root,
+    is_repo_root,
     load_program,
     parse_dod,
     parse_program_table,
@@ -66,8 +68,10 @@ def test_observed_status_follows_the_checkboxes() -> None:
 
     assert task(True, True).observed == "done"
     assert task(True, False).observed == "doing"
-    assert task(False, False).observed == "todo"
-    assert task().observed == "todo", "nothing to observe reads as not started"
+    assert task(False, False).observed == "doing", (
+        "criteria written but unticked means the task is underway, not untouched"
+    )
+    assert task().observed == "todo", "no directory and no criteria reads as not started"
 
 
 def test_drift_compares_mirror_against_observation() -> None:
@@ -97,7 +101,48 @@ def test_load_program_survives_a_directory_with_no_readme(repo: Path) -> None:
     (repo / "e04-agentic-fundamentals").mkdir()
     by_id = {task.id: task for task in load_program(repo)}
     assert by_id["E4"].directory is not None
-    assert by_id["E4"].observed == "todo"
+    assert by_id["E4"].observed == "unknown", "a directory with no criteria cannot be judged"
+
+
+def test_a_scaffolded_task_with_no_ticks_yet_reads_as_in_progress(repo: Path) -> None:
+    """The E4 case: branch checked out, README written, not one box ticked."""
+    scaffold = repo / "e04-agentic-fundamentals"
+    scaffold.mkdir()
+    (scaffold / "README.md").write_text(
+        "# E4\n\n## Definition of done\n\n- [ ] one\n- [ ] two\n", encoding="utf-8"
+    )
+
+    by_id = {task.id: task for task in load_program(repo)}
+    assert by_id["E4"].observed == "doing"
+    assert by_id["E4"].drifted is True, "root README still says not-started and must be called out"
+
+
+def test_not_started_is_distinguishable_from_started_without_criteria(repo: Path) -> None:
+    by_id = {task.id: task for task in load_program(repo)}
+    assert by_id["E12"].observed == "todo", "E12 has no directory at all"
+
+    (repo / "e12-cert-ai-900").mkdir()
+    by_id = {task.id: task for task in load_program(repo)}
+    assert by_id["E12"].observed == "unknown", "scaffolded but unreadable is not the same thing"
+
+
+def test_is_repo_root_needs_both_a_readme_and_a_task_directory(tmp_path: Path, repo: Path) -> None:
+    assert is_repo_root(repo) is True
+
+    readme_only = tmp_path / "readme-only"
+    readme_only.mkdir()
+    (readme_only / "README.md").write_text("# Not the journey repo\n", encoding="utf-8")
+    assert is_repo_root(readme_only) is False, "a stray README is not the repo root"
+
+
+def test_find_repo_root_searches_upward_from_a_nested_directory(repo: Path) -> None:
+    nested = repo / "e03-claude-code-101" / "journey"
+    nested.mkdir(parents=True, exist_ok=True)
+    assert find_repo_root(nested) == repo.resolve()
+
+
+def test_find_repo_root_falls_back_to_the_starting_point(tmp_path: Path) -> None:
+    assert find_repo_root(tmp_path) == tmp_path.resolve()
 
 
 def test_load_program_rejects_a_path_that_is_not_the_repo_root(tmp_path: Path) -> None:

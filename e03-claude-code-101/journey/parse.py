@@ -65,18 +65,22 @@ class Task:
 
     @property
     def observed(self) -> str:
-        """Status implied by the checkboxes, regardless of what the mirror claims.
+        """Status implied by the repo itself, regardless of what the mirror claims.
 
-        A task with no directory or no checkboxes has nothing to observe, so it
-        reads as not started.
+        Scaffolding a task directory with acceptance criteria *is* starting the
+        task, so criteria that exist but are all unticked read as DOING rather
+        than TODO. That gap is where drift used to hide: the mirror could sit on
+        not-started for a task with a checked-out branch and a written README,
+        and both sides agreed because both meant "no boxes ticked yet".
+
+        Only two states are genuinely not-started or unreadable: no directory at
+        all, and a directory whose README has no "Definition of done" to judge.
         """
-        if not self.dod:
+        if self.dod:
+            return DONE if all(item.checked for item in self.dod) else DOING
+        if self.directory is None:
             return TODO
-        if all(item.checked for item in self.dod):
-            return DONE
-        if any(item.checked for item in self.dod):
-            return DOING
-        return TODO
+        return UNKNOWN
 
     @property
     def drifted(self) -> bool:
@@ -149,6 +153,34 @@ def task_directories(repo_root: Path) -> dict[int, Path]:
         if match:
             found[int(match.group(1))] = entry
     return found
+
+
+def is_repo_root(path: Path) -> bool:
+    """True when `path` holds the root README and at least one ``e<N>-`` directory."""
+    if not (path / "README.md").is_file():
+        return False
+    try:
+        return any(TASK_DIR.match(entry.name) for entry in path.iterdir() if entry.is_dir())
+    except OSError:
+        return False
+
+
+def find_repo_root(start: Path | None = None) -> Path:
+    """Nearest ancestor of `start` (default: the working directory) that is the repo.
+
+    Deliberately searches from the working directory rather than from this file's
+    location. Once the package is installed normally, ``__file__`` sits in
+    site-packages and says nothing about which repo the user is standing in; only an
+    editable install makes the two coincide.
+
+    Returns `start` unchanged when no ancestor matches, so the caller still raises
+    the usual "is that the repo root?" error against a sensible path.
+    """
+    current = (start or Path.cwd()).resolve()
+    for candidate in (current, *current.parents):
+        if is_repo_root(candidate):
+            return candidate
+    return current
 
 
 def load_program(repo_root: Path) -> list[Task]:
