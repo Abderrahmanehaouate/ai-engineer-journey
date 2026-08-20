@@ -50,7 +50,7 @@ public mirror. Status: ⬜ not started · 🔄 in progress · ✅ done.
 | E3 | Claude Code 101 | 3.5h | ✅ |
 | E4 | Agentic fundamentals: LLM, RAG, tool use, MCP | 7h | 🔄 |
 | E5 | Introduction to Model Context Protocol (MCP) | 7h | ⬜ |
-| E6 | GitHub Copilot & GitHub at the state of the art | 3.5h | ⬜ |
+| E6 | GitHub Copilot & GitHub at the state of the art | 3.5h | 🔄 |
 | E7 | Claude Code in Action | 7h | ⬜ |
 | E8 | Hugging Face AI Agents Course (+ certification) | 21h | ⬜ |
 | E9 | Create agents in Microsoft Copilot Studio | 14h | ⬜ |
